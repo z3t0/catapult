@@ -22,11 +22,11 @@ union() {
 	}
 
 	// axles
-	translate([arm_width/2 + space_after, arm_width/2/2, part_width]) {
+	translate([arm_width/2 + space_after, arm_width/2/2, 0]) {
 		cube([axle_width, axle_length, axle_width]);
 	}
 
-	translate([arm_width/2 + space_after + axle_width, -arm_width/2/2, part_width]) {
+	translate([arm_width/2 + space_after + axle_width, -arm_width/2/2, 0]) {
 		rotate([0, 0, 180])
 		cube([axle_width, axle_length, axle_width]);
 	}
