@@ -11,6 +11,8 @@ arm_length = 150;
 arm_width = 20;
 arm_height = 30;
 arm_short = arm_length / 4.75;
+echo(arm_short);
+echo(arm_long);
 arm_long = arm_short * 3.75;
 arm_hole = 1.5;
 
@@ -38,26 +40,23 @@ axle_length = (base_width + base_distance) * 2  + arm_width;
 // 2 : arm
 // 3 : base
 // 4 : axle
-mode = 0;
+// 5 : holder
+mode = 5;
 
 // Axle
 if (mode == 0 || mode == 4) {
-	if (mode == 4) {
-		axle();
-	}
 
-	else if (mode == 0) { 
 
-		difference() {
+
+	difference() {
 		translate([+arm_long, base_width/2 + base_distance, base_height - axle_radius/2 - base_width / 2]) {
 			rotate([0, 0, 90]) {
 				axle();
 			}
 		}
 		translate([-base_width, +base_width/2, base_height - axle_radius - base_width / 2])
-			cube([base_width * 3, axle_radius, axle_radius]);
-			
-	}
+		cube([base_width * 3, axle_radius, axle_radius]);
+		
 	}
 }
 
@@ -115,8 +114,15 @@ module arm(){
 
 // Base
 if (mode == 0 || mode == 3) {
-	if (mode == 3)
-	base();
+	if (mode == 3){
+		difference() {
+
+			base();
+			translate([-base_width, +base_width/2, base_height - axle_radius - base_width / 2])
+			cube([base_width * 3, axle_radius, axle_radius]);
+
+		}
+	}
 	else if (mode == 0) {
 		difference() {
 
@@ -178,4 +184,18 @@ module prism(l, w, h) {
 // Payload
 if(mode == 1) {
 	sphere(r=payload_radius);
+}
+
+if (mode == 5) {
+	difference() {
+		l = (payload_radius + tolerance/2) * 3.3;
+		translate([0, 0, l/2])
+		cube([l,l,payload_radius * 2], center=true);
+		translate([0, 0, l/2 * 1.3])
+		sphere(r=payload_radius + tolerance/2);
+		translate([-l/2 + l /10, 0, 0])
+		cylinder(r = arm_hole, l* 3);
+		translate([+l/2 - l /10, 0, 0])
+		cylinder(r = arm_hole, l* 3);
+	}
 }
